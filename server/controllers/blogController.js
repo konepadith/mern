@@ -25,12 +25,6 @@ module.exports.create=async function create(req,res,next){
             return res.status(400).json({error:"please input content"})
             break;   
     }
-    //Record data
-    // Blogs.create({title,content,author,slug}).then((blog,err)=>{
-    //     if (err) {  
-    //                 res.status(400).json({error:err})
-    //             }
-    //     res.json(blog)})
         try {
             const blogs = await Blogs.create({title,content,author,slug});
             res.json(blogs)
