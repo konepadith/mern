@@ -20,10 +20,9 @@ module.exports.create = async (req, res, next) => {
 
   try {
     const { title, content, author } = req.body;
-    let slug = slugify(title);
+    let slug = title+" "+uuidv4(1);
 
-    if (!slug) slug = uuidv4();
-
+    // if (!slug) slug = uuidv4();
     // Validate Data
     switch (true) {
       case !title:
@@ -73,5 +72,29 @@ module.exports.remove = async (req, res, next) => {
   } catch (error) {
     console.error({ "DeleteError": error });
     res.status(500).json({ message: "An error occurred while deleting the document" });
+  }
+}
+
+module.exports.update=async(req,res,next)=>{
+  try {
+    const { slug } = req.params;
+    const { title, content, author } = req.body;
+
+    // Validation
+    if (!title || !content || !author) {
+      res.status(400).json({ message: "Missing required fields" });
+    }
+
+    // Update with { new: true } option to return the modified document
+    const updateBlog = await Blogs.findOneAndUpdate({ slug }, { title, content, author }, { new: true }).exec();
+
+    if (updateBlog) {
+      res.json({ message: "Update Successful", updatedBlog: updateBlog });
+    } else {
+      res.status(400).json({ message: "An error occurred while updating the document" });
+    }
+  } catch (error) {
+    console.error({ UpdateError: error });
+    res.status(500).json({ message: "An error occurred while updating the document" });
   }
 }
