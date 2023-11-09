@@ -81,9 +81,9 @@ module.exports.update=async(req,res,next)=>{
     const { title, content, author } = req.body;
 
     // Validation
-    if (!title || !content || !author) {
-      res.status(400).json({ message: "Missing required fields" });
-    }
+    // if (!title || !content || !author) {
+    //   res.status(400).json({ message: "Missing required fields" });
+    // }
 
     // Update with { new: true } option to return the modified document
     const updateBlog = await Blogs.findOneAndUpdate({ slug }, { title, content, author }, { new: true }).exec();
